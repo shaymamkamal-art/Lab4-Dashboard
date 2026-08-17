@@ -248,7 +248,7 @@
   <!-- Wall -->
   <div class="wall-card">
     <div class="wall-eyebrow">Lab 4 wall · Shared memory</div>
-    <div class="wall-title">Leave a signal</div>
+    <div class="wall-title" lang="ar" dir="rtl">سيب لينا رسالة يا رايق</div>
     <div class="wall-caption" lang="ar" dir="rtl">اكتب اسمك ورسالتك، وهتظهر لكل الفريق على الداشبورد</div>
 
     <div class="wall-form">
@@ -351,6 +351,12 @@
     const message = document.createElement("span");
     message.className = "msg";
     message.innerText = msg;
+    const isArabic = /[\u0600-\u06FF]/.test(msg);
+    if(isArabic){
+      message.setAttribute("dir","rtl");
+      message.setAttribute("lang","ar");
+      message.style.textAlign = "right";
+    }
     wrap.appendChild(who);
     wrap.appendChild(message);
     document.getElementById("wallList").prepend(wrap);
@@ -364,7 +370,18 @@
     "Every clean row is one step closer.",
     "Loss is dropping. So is our patience.",
     "17 days of signal left. Stay tuned.",
-    "The model believes in us. Mostly."
+    "The model believes in us. Mostly.",
+    "Small commits, big progress.",
+    "Coffee levels: critical. Motivation: stable.",
+    "One more chart, one more insight.",
+    "The dashboard doesn't build itself. We do.",
+    "Debugging today, presenting tomorrow.",
+    "Every dataset has a story. We're close to ours.",
+    "Consistency beats intensity. Keep the streak alive.",
+    "The final stretch feels long. It's almost over.",
+    "We didn't come this far to stop now.",
+    "Last call for revisions. Make them count.",
+    "Lab 4 is complete. Data Analyst crew — well done."
   ];
   function cycleQuote(){
     const el = document.getElementById("telQuote");
