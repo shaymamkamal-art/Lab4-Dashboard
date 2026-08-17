@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digilians - Lab 4 Final Countdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #151c2e;
+            --accent-cyan: #00f3ff;
+            --accent-green: #00ff88;
+            --accent-pink: #ff2a85;
+            --accent-yellow: #ffcc00;
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 20px; min-height: 100vh; }
+        
+        .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #1e293b; padding-bottom: 15px; }
+        .header h1 { font-size: 2.3rem; color: var(--accent-cyan); text-shadow: 0 0 12px rgba(0,243,255,0.4); }
+        .header p { color: var(--text-sub); font-size: 1.15rem; margin-top: 5px; }
+        .highlight { color: var(--accent-pink); font-weight: bold; }
+
+        .grid-container { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 20px; }
+        @media (max-width: 1024px) { .grid-container { grid-template-columns: 1fr; } }
+
+        .card { background: var(--card-bg); border-radius: 16px; padding: 20px; border: 1px solid #1e293b; box-shadow: 0 8px 20px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; color: var(--accent-yellow); display: flex; align-items: center; gap: 8px; }
+
+        /* Timer Section */
+        .timer-box { text-align: center; background: linear-gradient(145deg, #101726, #1a233a); border: 2px solid var(--accent-cyan); }
+        .countdown { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .time-unit { background: #090d16; padding: 12px; border-radius: 12px; min-width: 70px; border: 1px solid #334155; }
+        .time-num { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); display: block; }
+        .time-label { font-size: 0.85rem; color: var(--text-sub); }
+
+        .progress-container { margin: 15px 0; }
+        .progress-bar-bg { background: #0f172a; height: 24px; border-radius: 12px; overflow: hidden; border: 1px solid #334155; }
+        .progress-bar-fill { background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); height: 100%; width: 0%; transition: width 0.5s ease; }
+
+        /* Meme & Humor Section */
+        .meme-box { text-align: center; }
+        .meme-content { background: #0d1322; padding: 18px; border-radius: 12px; border-right: 4px solid var(--accent-pink); margin-bottom: 15px; min-height: 130px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; line-height: 1.6; color: #f1f5f9; }
+        
+        /* Interactive Buttons */
+        .btn { background: var(--accent-cyan); color: #000; font-weight: bold; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; transition: all 0.2s; font-size: 1rem; width: 100%; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(0,243,255,0.4); }
+        .btn-success { background: var(--accent-green); margin-top: 10px; }
+
+        /* Sticky Notes Board */
+        .notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .note { background: #fef08a; color: #1e293b; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; text-align: right; }
+        .note:nth-child(2) { background: #bae6fd; }
+        .note:nth-child(3) { background: #bbf7d0; }
+        .note:nth-child(4) { background: #fbcfe8; }
+        
+        .input-group { display: flex; gap: 8px; }
+        .input-group input { flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🔥 العد التنازلي النهائي: Lab 4 Data Analytics</h1>
+        <p>مبادرة Digilians تُوشك على الانتهاء.. متبقي <span class="highlight">17 يوماً فقط</span> على يوم 3 سبتمبر! 🎓</p>
+    </div>
+
+    <div class="grid-container">
+        
+        <!-- Left Column: Lab 4 Board -->
+        <div class="card">
+            <div>
+                <div class="card-title">📌 سبورة رسائل Lab 4 اليومية</div>
+                <div class="notes-grid" id="notesBoard">
+                    <div class="note">باقي 17 يوم ونقول للـ Overfitting باي باي! 🎓</div>
+                    <div class="note">الـ Fine-Tuning الأخير خلاص بيخلص! 🔥</div>
+                    <div class="note">يا داتايست هانت جداً، عاش يا أبطال 🚀</div>
+                    <div class="note">Model Training Status: 94% Complete! 🤖</div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="newNoteInput" placeholder="اكتب رسالة مشجعة للفلور...">
+                <button class="btn" style="width: auto;" onclick="addNote()">إضافة</button>
+            </div>
+        </div>
+
+        <!-- Center Column: Countdown -->
+        <div class="card timer-box">
+            <div>
+                <div class="card-title" style="justify-content: center;">⏳ Epoch Convergence Timer</div>
+                <div class="countdown">
+                    <div class="time-unit"><span class="time-num" id="days">17</span><span class="time-label">يوم</span></div>
+                    <div class="time-unit"><span class="time-num" id="hours">0</span><span class="time-label">ساعة</span></div>
+                    <div class="time-unit"><span class="time-num" id="minutes">0</span><span class="time-label">دقيقة</span></div>
+                    <div class="time-unit"><span class="time-num" id="seconds">0</span><span class="time-label">ثانية</span></div>
+                </div>
+
+                <div class="progress-container">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.9rem;">
+                        <span>نسبة الإنجاز (Model Accuracy):</span>
+                        <span id="progressPercent" style="color:var(--accent-green); font-weight:bold;">94%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-success" onclick="markDayComplete()">🎉 علم على نهاية اليوم (Epoch Completed!)</button>
+        </div>
+
+        <!-- Right Column: Memes & Humor -->
+        <div class="card meme-box">
+            <div>
+                <div class="card-title">🎭 جرعة ضحك الـ 17 يوماً الأخيرة (زغاليل & الدحيح)</div>
+                <div class="meme-content" id="memeDisplay">
+                    "يا عزيزي الداتايست.. باقي 17 يوم فقط والـ Loss يوصل لصفر! استحمل الـ Hyperparameters شوية كمان!" 💡
+                </div>
+            </div>
+            <button class="btn" onclick="generateMeme()">🎲 غير الميم التشجيعي</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Start Date: Dec 6, 2025 | End Date: Sept 3, 2026
+        const targetDate = new Date("September 3, 2026 00:00:00").getTime();
+        const startDate = new Date("December 6, 2025 00:00:00").getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = days;
+                document.getElementById("hours").innerText = hours;
+                document.getElementById("minutes").innerText = minutes;
+                document.getElementById("seconds").innerText = seconds;
+
+                const totalDuration = targetDate - startDate;
+                const elapsed = now - startDate;
+                let percent = Math.min(Math.max((elapsed / totalDuration) * 100, 0), 100).toFixed(1);
+                
+                document.getElementById("progressBar").style.width = percent + "%";
+                document.getElementById("progressPercent").innerText = percent + "%";
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // 17-Days Specific Memes
+        const memes = [
+            "يا عزيزي الداتايست.. باقي 17 يوم فقط والـ Loss يوصل لصفر! استحمل شوية كمان! 🧠✨",
+            "لما تحسب الأيام وتلاقي متبقي 17 يوم بس: 'شغل الـ GPU بأقصى طاقة إحنا في الفينش!' 🚀",
+            "برنامج زغاليل يقدم: كيف تحتفل بمرور يوم جديد في Lab 4 بدون ما الـ Pipeline يضرب؟ 🐧⚡",
+            "17 يوم وتصبحوا رسميًا خبراء Data Analytics والـ AI يسقف لكم! 🏆",
+            "لو الـ Model جاب Error النهاردة، افتكر إن باقي 17 يوم وكل حاجة هتتحل! ❄️",
+            "عزيزي الدحيح: إحنا في آخر 17 Epoch.. جاب الوقت نرفع الـ Learning Rate للـ Maximum!"
+        ];
+
+        function generateMeme() {
+            const randomIndex = Math.floor(Math.random() * memes.length);
+            document.getElementById("memeDisplay").innerText = memes[randomIndex];
+        }
+
+        function markDayComplete() {
+            alert("🎉 عاش يا أبطال Lab 4! يوم كمان اتعلم عليه بنجاح.. هانت جداً، فاضل تكّة!");
+        }
+
+        function addNote() {
+            const input = document.getElementById("newNoteInput");
+            if (input.value.trim() !== "") {
+                const board = document.getElementById("notesBoard");
+                const newNote = document.createElement("div");
+                newNote.className = "note";
+                newNote.innerText = input.value;
+                board.appendChild(newNote);
+                input.value = "";
+            }
+        }
+    </script>
+</body>
+</html>
